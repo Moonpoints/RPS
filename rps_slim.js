@@ -5,61 +5,76 @@ function getComputerChoice() {
  } else if (val <.66) {
     return "Paper"
  } else return "Scissors"
- 
  }
  
-function getHumanChoice() {
-    const userPick = prompt("Choose one: Rock, Paper, Scissors");
-    let lowUserPick = userPick.toLowerCase()
-    if (lowUserPick == "rock") {
-        return "Rock"
-    } else if (lowUserPick == "paper") {
-        return "Paper"
-    } else if (lowUserPick == "scissors"){
-        return "Scissors"
-    }
- }
- let humanScore = 0;
-     let computerScore = 0;
+ const buttons = document.querySelectorAll(".choice");
+
+buttons.forEach((button)=> {
+    button.addEventListener("click", () => {
+        humanChoice = button.id;
+        const computerChoice = getComputerChoice();
+        playRound(humanChoice, computerChoice);
+    });
+});
+
+const results = document.querySelector("#results");
+let humanScore = 0;
+let computerScore = 0;
  
 function playRound(humanChoice, computerChoice) {
     if (humanChoice === computerChoice){
-        console.log("Tie");
+        results.textContent = "Tie";
     } else if (humanChoice == "Rock" && computerChoice == "Paper") {
-        console.log("You lose! Paper beats Rock");
+        results.textContent = "You lose! Paper beats Rock";
         computerScore ++;
     } else if (humanChoice == "Rock" && computerChoice == "Scissors") {
-       console.log("You win! Rock beats Scissors");
+       results.textContent = "You win! Rock beats Scissors";
        humanScore ++;
     } else if (humanChoice == "Paper" && computerChoice == "Rock") {
-        console.log("You win! Paper beats Rock");
+        results.textContent = "You win! Paper beats Rock";
         humanScore ++;
     } else if (humanChoice == "Paper" && computerChoice == "Scissors") {
-        console.log("You lose! Scissors beats Paper");
+        results.textContent = "You lose! Scissors beats Paper";
         computerScore ++;
     } else if (humanChoice == "Scissors" && computerChoice == "Rock") {
-        console.log("You lose! Rock beats Scissors");
+        results.textContent = "You lose! Rock beats Scissors";
         computerScore ++;
     } else if (humanChoice == "Scissors" && computerChoice == "Paper") {
-        console.log("You win! Scissors beat Paper");
+        results.textContent = "You win! Scissors beat Paper";
         humanScore ++;
  }
- console.log(`Player: ${humanScore} | Computer: ${computerScore}`)
+ score.textContent = `Player: ${humanScore} | Computer: ${computerScore}`;
+ endGame(humanScore, computerScore);
 }
 
-function playGame(){
-    for (let i = 0; i < 5; i++) {
-    const humanChoice = getHumanChoice();
-    const computerChoice = getComputerChoice();
-    playRound(humanChoice, computerChoice);
+function endGame(humanScore, computerScore){
+    if (humanScore == 5) {
+        results.textContent = "GAME OVER! Congratulations, You Won!";
+        score.textContent = "Final Score: Player - " + humanScore + " | Computer - " + computerScore;
+         buttons.forEach((button) => {
+            button.disabled = true;
+            restartButton.style.display = "inline-block";
+
+        });
+    } else if ( computerScore == 5) {
+        results.textContent = "GAME OVER! Sorry, You Lost.";
+        score.textContent = "Final Score: Player - " + humanScore + " | Computer - " + computerScore;
+         buttons.forEach((button) => {
+            button.disabled = true;
+            restartButton.style.display = "inline-block";
+
+        });
 }
-console.log("Game Over. Final Score: Player - " + humanScore + " | Computer - " + computerScore );
-if (humanScore < computerScore){
-    console.log("Sorry, You Lost.")
-}else if (humanScore > computerScore){
-    console.log("Congratulations, You Won!" )
-} else {
-    console.log("You Tied.")
 }
-}
- playGame();
+
+const restartButton = document.querySelector("#restart")
+
+restartButton.addEventListener("click", () => {
+    humanScore = 0;
+    computerScore = 0;
+    results.textContent = "";
+    score.textContent = `Player: ${humanScore} | Computer: ${computerScore}`;
+    buttons.forEach((button) => button.disabled = false);
+})
+
+
